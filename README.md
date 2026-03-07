@@ -1,6 +1,6 @@
 > [!NOTE]
 >
-> This is a fork of [faga295/napi-tokei](https://github.com/faga295/napi-tokei) with an updated version of its [tokei](https://github.com/XAMPPRocky/tokei) dependency and some modernization to the repo template.
+> This is a fork of [faga295/napi-tokei](https://github.com/faga295/napi-tokei) with an updated version of its [tokei](https://github.com/XAMPPRocky/tokei) dependency, additional configuration options, and some modernization to the repo template.
 >
 > The original readme is below.
 

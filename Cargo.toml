@@ -6,6 +6,10 @@ version = "1.1.0"
 [lib]
 crate-type = ["cdylib"]
 
+[[bin]]
+name = "list-languages"
+path = "scripts/list-languages.rs"
+
 [dependencies]
 napi = "3.0.0"
 napi-derive = "3.0.0"

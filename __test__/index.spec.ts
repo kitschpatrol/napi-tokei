@@ -119,3 +119,13 @@ test('tokei files option returns per-file reports', (t) => {
   t.is(totalComments, rust.comments)
   t.is(totalBlanks, rust.blanks)
 })
+
+test('tokei silently ignores invalid language names', (t) => {
+  const result = tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target'],
+    languages: ['Rust', 'NotARealLanguage'],
+  })
+  t.is(result.length, 1)
+  t.is(result[0].lang, 'Rust')
+})

@@ -1,9 +1,7 @@
 #![deny(clippy::all)]
-mod lang;
-use lang::LangType;
 use napi_derive::napi;
 use std::env;
-use tokei::{Config, Languages};
+use tokei::{Config, LanguageType, Languages};
 #[napi(object)]
 pub struct LanguageInfo {
   pub lang: String,
@@ -56,9 +54,12 @@ fn build_reports(reports: &[tokei::Report]) -> Vec<Report> {
 #[napi]
 pub fn tokei(options: TokeiOptions) -> Vec<LanguageInfo> {
   let include_files = options.files.unwrap_or(false);
-  let langs: Option<Vec<LangType>> = options
-    .languages
-    .map(|lang_type| lang_type.iter().map(|s| LangType::from(&**s)).collect());
+  let langs: Option<Vec<LanguageType>> = options.languages.map(|lang_names| {
+    lang_names
+      .iter()
+      .filter_map(|s| LanguageType::from_name(s))
+      .collect()
+  });
 
   let config = Config {
     hidden: options.hidden,
@@ -67,7 +68,7 @@ pub fn tokei(options: TokeiOptions) -> Vec<LanguageInfo> {
     no_ignore_dot: options.no_ignore_dot,
     no_ignore_vcs: options.no_ignore_vcs,
     treat_doc_strings_as_comments: options.treat_doc_strings_as_comments,
-    types: langs.as_ref().map(|l| l.iter().map(|lt| **lt).collect()),
+    types: langs.clone(),
     ..Config::default()
   };
 
@@ -87,8 +88,8 @@ pub fn tokei(options: TokeiOptions) -> Vec<LanguageInfo> {
 
   let mut res: Vec<LanguageInfo> = vec![];
   if let Some(langs) = langs {
-    langs.iter().for_each(|lang_type| {
-      if let Some(lang) = languages.get(&**lang_type) {
+    for lang_type in &langs {
+      if let Some(lang) = languages.get(lang_type) {
         res.push(LanguageInfo {
           lang: lang_type.to_string(),
           files: lang.reports.len() as u32,
@@ -101,24 +102,24 @@ pub fn tokei(options: TokeiOptions) -> Vec<LanguageInfo> {
           } else {
             None
           },
-        })
+        });
       }
-    })
+    }
   } else {
-    for lang in languages.into_iter() {
+    for (lang_type, lang) in &languages {
       res.push(LanguageInfo {
-        lang: lang.0.to_string(),
-        files: lang.1.reports.len() as u32,
-        lines: lang.1.lines() as u32,
-        code: lang.1.code as u32,
-        comments: lang.1.comments as u32,
-        blanks: lang.1.blanks as u32,
+        lang: lang_type.to_string(),
+        files: lang.reports.len() as u32,
+        lines: lang.lines() as u32,
+        code: lang.code as u32,
+        comments: lang.comments as u32,
+        blanks: lang.blanks as u32,
         reports: if include_files {
-          Some(build_reports(&lang.1.reports))
+          Some(build_reports(&lang.reports))
         } else {
           None
         },
-      })
+      });
     }
   }
 

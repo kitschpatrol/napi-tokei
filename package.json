@@ -62,7 +62,7 @@
     "prepublishOnly": "napi prepublish -t npm",
     "test": "ava",
     "version": "napi version",
-    "gen:lang": "node ./scripts/genLang.cjs"
+    "gen:types": "node ./scripts/generate-types.mjs"
   },
   "devDependencies": {
     "@napi-rs/cli": "^3.5.1",
