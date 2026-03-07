@@ -6,30 +6,38 @@ import { fileURLToPath } from 'url'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
 
-// Get all language names directly from the tokei crate
-const output = execSync('cargo run --bin list-languages -q', { encoding: 'utf-8', cwd: root })
+export function fixTypes() {
+  // Get all language names directly from the tokei crate
+  const output = execSync('cargo run --bin list-languages -q', { encoding: 'utf-8', cwd: root })
 
-const languages = output.trim().split('\n')
-const unionType = languages.map((l) => `  | '${l.replace(/'/g, "\\'")}'`).join('\n')
+  const languages = output.trim().split('\n')
+  const unionType = languages.map((l) => `  | '${l.replace(/'/g, "\\'")}'`).join('\n')
 
-const dtsPath = fileURLToPath(new URL('../index.d.ts', import.meta.url))
-let dts = readFileSync(dtsPath, 'utf-8')
+  const dtsPath = fileURLToPath(new URL('../index.d.ts', import.meta.url))
+  let dts = readFileSync(dtsPath, 'utf-8')
 
-// Remove any existing Language definition
-dts = dts.replace(/\nexport type Language =[\s\S]*?\n\n/g, '\n')
+  // Remove any existing Language definition
+  dts = dts.replace(/\nexport type Language =[\s\S]*?\n\n/g, '\n')
 
-// Add the union type before the first export
-dts = dts.replace('/* eslint-disable */\n', `/* eslint-disable */\n\nexport type Language =\n${unionType}\n\n`)
+  // Add the union type before the first export
+  dts = dts.replace('/* eslint-disable */\n', `/* eslint-disable */\n\nexport type Language =\n${unionType}\n\n`)
 
-// Replace Array<string> with Array<Language> for languages field
-dts = dts.replace('languages?: Array<string>', 'languages?: Array<Language>')
+  // Replace Array<string> with Array<Language> for languages field
+  dts = dts.replace('languages?: Array<string>', 'languages?: Array<Language>')
 
-// Replace language: string with language: Language in LanguageInfo
-dts = dts.replace(/^( +language): string$/m, '$1: Language')
+  // Replace language: string with language: Language in LanguageInfo
+  dts = dts.replace(/^( +language): string$/m, '$1: Language')
 
-// Fix async tokei() return type (napi-rs generates Promise<unknown> for AsyncTask)
-dts = dts.replace('Promise<unknown>', 'Promise<Array<LanguageInfo>>')
+  // Fix async tokei() return type (napi-rs generates Promise<unknown> for AsyncTask)
+  dts = dts.replace('Promise<unknown>', 'Promise<Array<LanguageInfo>>')
 
-writeFileSync(dtsPath, dts)
+  writeFileSync(dtsPath, dts)
 
-console.log(`Generated Language union with ${languages.length} variants`)
+  console.log(`Generated Language union with ${languages.length} variants`)
+}
+
+// Allow direct invocation: node ./scripts/fix-types.mjs
+const isDirectRun = process.argv[1] && fileURLToPath(import.meta.url).endsWith(process.argv[1])
+if (isDirectRun) {
+  fixTypes()
+}

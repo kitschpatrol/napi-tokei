@@ -36,8 +36,8 @@
   "scripts": {
     "artifacts": "napi artifacts",
     "bench": "node --import @oxc-node/core/register benchmark/bench.ts",
-    "build:debug": "napi build --platform && node ./scripts/fix-types.mjs",
-    "build": "napi build --platform --release && node ./scripts/fix-types.mjs",
+    "build:debug": "node ./scripts/build.mjs",
+    "build": "node ./scripts/build.mjs --release",
     "clean": "git rm -f pnpm-lock.yaml ; git clean -fdX",
     "format:prettier": "prettier . -w",
     "format:readme": "mdat readme expand",
