@@ -1,25 +1,26 @@
 {
   "name": "@kitschpatrol/tokei",
   "version": "1.1.0",
-  "description": "Node binding for tokei, a fast code statistics tool",
+  "description": "Node binding for tokei, a fast code statistics tool.",
   "main": "index.js",
   "types": "index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/kitschpatrol/napi-tokei.git"
+    "url": "git+https://github.com/kitschpatrol/napi-tokei.git"
   },
+  "homepage": "https://github.com/kitschpatrol/napi-tokei",
   "license": "MIT",
   "keywords": [
-    "napi-rs",
-    "NAPI",
-    "N-API",
-    "Rust",
-    "node-addon",
-    "node-addon-api",
-    "tokei",
     "code-stats",
+    "lines-of-code",
     "loc",
-    "lines-of-code"
+    "napi-rs",
+    "napi",
+    "node-addon-api",
+    "node-addon",
+    "node-package",
+    "rust",
+    "tokei"
   ],
   "files": [
     "index.d.ts",
