@@ -12,17 +12,15 @@ pub struct LanguageInfo {
   pub code: u32,
   pub comments: u32,
   pub blanks: u32,
+  pub reports: Option<Vec<Report>>,
 }
 #[napi(object)]
 pub struct Report {
   pub name: String,
-  pub status: Vec<CodeStatus>,
-}
-#[napi(object)]
-pub struct CodeStatus {
-  pub blanks: u32,
+  pub lines: u32,
   pub code: u32,
   pub comments: u32,
+  pub blanks: u32,
 }
 
 #[napi(object)]
@@ -36,10 +34,28 @@ pub struct TokeiOptions {
   pub no_ignore_dot: Option<bool>,
   pub no_ignore_vcs: Option<bool>,
   pub treat_doc_strings_as_comments: Option<bool>,
+  pub files: Option<bool>,
+}
+
+fn build_reports(reports: &[tokei::Report]) -> Vec<Report> {
+  reports
+    .iter()
+    .map(|r| {
+      let stats = r.stats.summarise();
+      Report {
+        name: r.name.to_string_lossy().to_string(),
+        lines: stats.lines() as u32,
+        code: stats.code as u32,
+        comments: stats.comments as u32,
+        blanks: stats.blanks as u32,
+      }
+    })
+    .collect()
 }
 
 #[napi]
 pub fn tokei(options: TokeiOptions) -> Vec<LanguageInfo> {
+  let include_files = options.files.unwrap_or(false);
   let langs: Option<Vec<LangType>> = options
     .languages
     .map(|lang_type| lang_type.iter().map(|s| LangType::from(&**s)).collect());
@@ -75,11 +91,16 @@ pub fn tokei(options: TokeiOptions) -> Vec<LanguageInfo> {
       if let Some(lang) = languages.get(&**lang_type) {
         res.push(LanguageInfo {
           lang: lang_type.to_string(),
-          files: (lang.reports.len() as u32),
-          lines: (lang.lines() as u32),
-          code: (lang.code as u32),
-          comments: (lang.comments as u32),
-          blanks: (lang.blanks as u32),
+          files: lang.reports.len() as u32,
+          lines: lang.lines() as u32,
+          code: lang.code as u32,
+          comments: lang.comments as u32,
+          blanks: lang.blanks as u32,
+          reports: if include_files {
+            Some(build_reports(&lang.reports))
+          } else {
+            None
+          },
         })
       }
     })
@@ -87,11 +108,16 @@ pub fn tokei(options: TokeiOptions) -> Vec<LanguageInfo> {
     for lang in languages.into_iter() {
       res.push(LanguageInfo {
         lang: lang.0.to_string(),
-        files: (lang.1.reports.len() as u32),
-        lines: (lang.1.lines() as u32),
-        code: (lang.1.code as u32),
-        comments: (lang.1.comments as u32),
-        blanks: (lang.1.blanks as u32),
+        files: lang.1.reports.len() as u32,
+        lines: lang.1.lines() as u32,
+        code: lang.1.code as u32,
+        comments: lang.1.comments as u32,
+        blanks: lang.1.blanks as u32,
+        reports: if include_files {
+          Some(build_reports(&lang.1.reports))
+        } else {
+          None
+        },
       })
     }
   }

@@ -80,3 +80,42 @@ test('tokei treatDocStringsAsComments shifts counts', (t) => {
   // With doc strings as comments, comments should be >= normal comments
   t.true(docAsComments[0].comments >= normal[0].comments)
 })
+
+test('tokei omits reports by default', (t) => {
+  const result = tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target'],
+    languages: ['Rust'],
+  })
+  t.is(result[0].reports, undefined)
+})
+
+test('tokei files option returns per-file reports', (t) => {
+  const result = tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target'],
+    languages: ['Rust'],
+    files: true,
+  })
+  const rust = result[0]
+  t.truthy(rust.reports)
+  t.true(Array.isArray(rust.reports))
+  t.true(rust.reports!.length > 0)
+  t.is(rust.reports!.length, rust.files)
+
+  const report = rust.reports![0]
+  t.is(typeof report.name, 'string')
+  t.true(report.name.endsWith('.rs'))
+  t.is(typeof report.lines, 'number')
+  t.is(typeof report.code, 'number')
+  t.is(typeof report.comments, 'number')
+  t.is(typeof report.blanks, 'number')
+
+  // Per-file stats should sum to the language totals
+  const totalCode = rust.reports!.reduce((sum, r) => sum + r.code, 0)
+  const totalComments = rust.reports!.reduce((sum, r) => sum + r.comments, 0)
+  const totalBlanks = rust.reports!.reduce((sum, r) => sum + r.blanks, 0)
+  t.is(totalCode, rust.code)
+  t.is(totalComments, rust.comments)
+  t.is(totalBlanks, rust.blanks)
+})
