@@ -577,3 +577,4 @@ if (!nativeBinding) {
 
 module.exports = nativeBinding
 module.exports.tokei = nativeBinding.tokei
+module.exports.tokeiSync = nativeBinding.tokeiSync

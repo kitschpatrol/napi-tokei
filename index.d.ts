@@ -368,9 +368,9 @@ export interface Report {
  * Count lines of code, comments, and blanks across files and languages.
  *
  * @param options - Configuration for paths, language filters, and analysis behavior.
- * @returns Aggregated statistics per language for the given paths.
+ * @returns Promise resolving to aggregated statistics per language for the given paths.
  */
-export declare function tokei(options?: TokeiOptions | undefined | null): Array<LanguageInfo>
+export declare function tokei(options?: TokeiOptions | undefined | null): Promise<Array<LanguageInfo>>
 
 /** Options for the `tokei` function. */
 export interface TokeiOptions {
@@ -379,7 +379,7 @@ export interface TokeiOptions {
    * @default Current working directory
    */
   include?: Array<string>
-  /** Paths to exclude from the analysis. */
+  /** Paths to exclude from the analysis. Tokei respects `.gitignore` and similar files by default. */
   exclude?: Array<string>
   /**
    * Filter results to only these languages. Uses Tokei display names (e.g. `"Rust"`, `"ASP.NET"`).
@@ -423,3 +423,11 @@ export interface TokeiOptions {
    */
   files?: boolean
 }
+
+/**
+ * Count lines of code, comments, and blanks across files and languages (synchronous).
+ *
+ * @param options - Configuration for paths, language filters, and analysis behavior.
+ * @returns Aggregated statistics per language for the given paths.
+ */
+export declare function tokeiSync(options?: TokeiOptions | undefined | null): Array<LanguageInfo>

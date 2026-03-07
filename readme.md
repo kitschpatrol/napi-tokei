@@ -15,7 +15,7 @@
 
 <!-- short-description -->
 
-**Node binding for Tokei, a fast code counting tool.**
+**Node bindings for Tokei, a fast code counting tool.**
 
 <!-- /short-description -->
 
@@ -31,7 +31,7 @@
 
 ## Overview
 
-Node.js native binding for [Tokei](https://github.com/XAMPPRocky/tokei), a fast code statistics tool written in Rust. It counts lines of code, comments, and blanks across 329 programming languages, with support for language filtering, per-file breakdowns, and configurable ignore rules.
+Node.js native bindings for [Tokei](https://github.com/XAMPPRocky/tokei), a fast code statistics tool written in Rust. It counts lines of code, comments, and blanks across 329 programming languages, with support for language filtering, per-file breakdowns, and configurable ignore rules.
 
 ## Getting started
 
@@ -56,7 +56,8 @@ npm install @kitschpatrol/tokei
 ```typescript
 import { tokei } from '@kitschpatrol/tokei'
 
-const results = tokei()
+const results = await tokei()
+
 // Returns:
 // [
 //   { language: 'JavaScript', files: 2, lines: 610, code: 577, comments: 12, blanks: 21 },
@@ -71,13 +72,17 @@ const results = tokei()
 
 ## Usage
 
-The library exposes a single `tokei(options?)` function with options similar to those provided by the [Tokei's `get_statistics` method](https://docs.rs/tokei/latest/tokei/struct.Languages.html#method.get_statistics) and the [Tokei CLI tool](https://github.com/XAMPPRocky/tokei).
+The library exposes `tokei(options?)` and `tokeiSync(options?)` functions with options similar to those provided by the [Tokei's `get_statistics` method](https://docs.rs/tokei/latest/tokei/struct.Languages.html#method.get_statistics) and the [Tokei CLI tool](https://github.com/XAMPPRocky/tokei).
 
 ### API
 
-#### `tokei(options?): LanguageInfo[]`
+#### `tokei(options?): Promise<LanguageInfo[]>`
 
-Count lines of code, comments, and blanks across files and languages.
+Count lines of code, comments, and blanks across files and languages. Runs on a background thread and returns a promise, so it doesn't block the Node.js event loop.
+
+#### `tokeiSync(options?): LanguageInfo[]`
+
+Synchronous version of `tokei`. Blocks the event loop until the analysis is complete. Useful for scripts, CLI tools, or cases where blocking is acceptable.
 
 #### `TokeiOptions`
 
@@ -86,7 +91,7 @@ All fields are optional.
 | Field                       | Type         | Default | Description                                                                                                                        |
 | --------------------------- | ------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `include`                   | `string[]`   | `["."]` | Paths to include in the analysis. Defaults to the current working directory.                                                       |
-| `exclude`                   | `string[]`   |         | Paths to exclude from the analysis.                                                                                                |
+| `exclude`                   | `string[]`   |         | Paths to exclude from the analysis. Tokei respects `.gitignore` and similar files by default.                                      |
 | `languages`                 | `Language[]` |         | Filter results to only these languages. Uses Tokei display names (e.g. `"Rust"`, `"ASP.NET"`). Invalid names are silently ignored. |
 | `hidden`                    | `boolean`    | `false` | Include hidden files and directories.                                                                                              |
 | `noIgnore`                  | `boolean`    | `false` | Don't respect any ignore files. Implies `noIgnoreParent`, `noIgnoreDot`, and `noIgnoreVcs`.                                        |
@@ -129,19 +134,22 @@ A TypeScript string literal union of all 329 supported language names, providing
 ### Examples
 
 ```ts
-import { tokei } from '@kitschpatrol/tokei'
+import { tokei, tokeiSync } from '@kitschpatrol/tokei'
 
-// Basic usage
-const results = tokei()
+// Basic async usage
+const results = await tokei()
+
+// Basic sync usage
+const resultsSync = tokeiSync()
 
 // Filter by language
-const tsOnly = tokei({
+const tsOnly = await tokei({
   exclude: ['secret_folder'],
   languages: ['TypeScript'],
 })
 
 // With per-file reports and config options
-const detailed = tokei({
+const detailed = await tokei({
   include: ['.'],
   exclude: ['secret_folder'],
   languages: ['TypeScript', 'Rust'],
@@ -167,16 +175,20 @@ Modifications from [upstream](https://github.com/faga295/napi-tokei) include the
 
 ### 2.0.0+
 
+- **`tokei()` is now async and returns a `Promise`**\
+  _Breaking_\
+  The `tokei()` function now runs on a background thread and returns `Promise<LanguageInfo[]>` instead of `LanguageInfo[]`. A synchronous `tokeiSync()` function is also available. To migrate, either `await` the result of `tokei()`, or switch to `tokeiSync()`.
+
 - **Language names use Tokei display names**\
-  _Breaking_
+  _Breaking_\
   Ensures consistency across input and output.
 
 - **Invalid language names are silently ignored**\
-  _Breaking_
+  _Breaking_\
   Instead of falling back to `Text`.
 
 - **`CodeStatus` type removed.**\
-  _Breaking_
+  _Breaking_\
   The `Report` type now directly contains `lines`, `code`, `comments`, and `blanks` fields.
 
 - **`lang` field renamed to `language`**\

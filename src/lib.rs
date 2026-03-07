@@ -1,4 +1,5 @@
 #![deny(clippy::all)]
+use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use std::env;
 use tokei::{Config, LanguageType, Languages};
@@ -43,7 +44,7 @@ pub struct TokeiOptions {
   /// Paths to include in the analysis.
   /// @default Current working directory
   pub include: Option<Vec<String>>,
-  /// Paths to exclude from the analysis.
+  /// Paths to exclude from the analysis. Tokei respects `.gitignore` and similar files by default.
   pub exclude: Option<Vec<String>>,
   /// Filter results to only these languages. Uses Tokei display names (e.g. `"Rust"`, `"ASP.NET"`).
   /// Invalid names are silently ignored.
@@ -112,13 +113,7 @@ fn build_language_info(
   }
 }
 
-/// Count lines of code, comments, and blanks across files and languages.
-///
-/// @param options - Configuration for paths, language filters, and analysis behavior.
-/// @returns Aggregated statistics per language for the given paths.
-#[napi]
-pub fn tokei(options: Option<TokeiOptions>) -> Vec<LanguageInfo> {
-  let options = options.unwrap_or_default();
+fn run_tokei(options: TokeiOptions) -> Vec<LanguageInfo> {
   let include_files = options.files.unwrap_or(false);
   let langs: Option<Vec<LanguageType>> = options.languages.map(|lang_names| {
     lang_names
@@ -170,4 +165,41 @@ pub fn tokei(options: Option<TokeiOptions>) -> Vec<LanguageInfo> {
       .map(|(lang_type, lang)| build_language_info(lang_type, lang, include_files))
       .collect()
   }
+}
+
+/// Count lines of code, comments, and blanks across files and languages (synchronous).
+///
+/// @param options - Configuration for paths, language filters, and analysis behavior.
+/// @returns Aggregated statistics per language for the given paths.
+#[napi(js_name = "tokeiSync")]
+pub fn tokei_sync(options: Option<TokeiOptions>) -> Vec<LanguageInfo> {
+  run_tokei(options.unwrap_or_default())
+}
+
+pub struct TokeiTask {
+  options: TokeiOptions,
+}
+
+impl Task for TokeiTask {
+  type Output = Vec<LanguageInfo>;
+  type JsValue = Vec<LanguageInfo>;
+
+  fn compute(&mut self) -> Result<Self::Output> {
+    Ok(run_tokei(std::mem::take(&mut self.options)))
+  }
+
+  fn resolve(&mut self, _env: Env, output: Self::Output) -> Result<Self::JsValue> {
+    Ok(output)
+  }
+}
+
+/// Count lines of code, comments, and blanks across files and languages.
+///
+/// @param options - Configuration for paths, language filters, and analysis behavior.
+/// @returns Promise resolving to aggregated statistics per language for the given paths.
+#[napi]
+pub fn tokei(options: Option<TokeiOptions>) -> AsyncTask<TokeiTask> {
+  AsyncTask::new(TokeiTask {
+    options: options.unwrap_or_default(),
+  })
 }

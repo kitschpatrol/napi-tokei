@@ -1,9 +1,9 @@
 import test from 'ava'
 
-import { tokei } from '../index.js'
+import { tokei, tokeiSync } from '../index.js'
 
-test('tokei returns language stats for the current project', (t) => {
-  const result = tokei({
+test('tokeiSync returns language stats for the current project', (t) => {
+  const result = tokeiSync({
     include: ['.'],
     exclude: ['node_modules', 'target', 'package-template', 'package-template-pnpm'],
   })
@@ -21,19 +21,19 @@ test('tokei returns language stats for the current project', (t) => {
   t.true(rust!.code > 0)
 })
 
-test('tokei filters by language', (t) => {
-  const result = tokei({ include: ['.'], exclude: ['node_modules', 'target'], languages: ['Rust'] })
+test('tokeiSync filters by language', (t) => {
+  const result = tokeiSync({ include: ['.'], exclude: ['node_modules', 'target'], languages: ['Rust'] })
   t.true(Array.isArray(result))
   t.is(result.length, 1)
   t.is(result[0].language, 'Rust')
 })
 
-test('tokei hidden option includes dotfiles', (t) => {
-  const withoutHidden = tokei({
+test('tokeiSync hidden option includes dotfiles', (t) => {
+  const withoutHidden = tokeiSync({
     include: ['.'],
     exclude: ['node_modules', 'target'],
   })
-  const withHidden = tokei({
+  const withHidden = tokeiSync({
     include: ['.'],
     exclude: ['node_modules', 'target'],
     hidden: true,
@@ -44,12 +44,12 @@ test('tokei hidden option includes dotfiles', (t) => {
   t.true(totalWith >= totalWithout)
 })
 
-test('tokei noIgnore option disables ignore file processing', (t) => {
-  const withIgnore = tokei({
+test('tokeiSync noIgnore option disables ignore file processing', (t) => {
+  const withIgnore = tokeiSync({
     include: ['.'],
     exclude: ['target'],
   })
-  const withoutIgnore = tokei({
+  const withoutIgnore = tokeiSync({
     include: ['.'],
     exclude: ['target'],
     noIgnore: true,
@@ -61,13 +61,13 @@ test('tokei noIgnore option disables ignore file processing', (t) => {
   t.true(totalWithout >= totalWith)
 })
 
-test('tokei treatDocStringsAsComments shifts counts', (t) => {
-  const normal = tokei({
+test('tokeiSync treatDocStringsAsComments shifts counts', (t) => {
+  const normal = tokeiSync({
     include: ['.'],
     exclude: ['node_modules', 'target'],
     languages: ['Rust'],
   })
-  const docAsComments = tokei({
+  const docAsComments = tokeiSync({
     include: ['.'],
     exclude: ['node_modules', 'target'],
     languages: ['Rust'],
@@ -81,8 +81,8 @@ test('tokei treatDocStringsAsComments shifts counts', (t) => {
   t.true(docAsComments[0].comments >= normal[0].comments)
 })
 
-test('tokei omits reports by default', (t) => {
-  const result = tokei({
+test('tokeiSync omits reports by default', (t) => {
+  const result = tokeiSync({
     include: ['.'],
     exclude: ['node_modules', 'target'],
     languages: ['Rust'],
@@ -90,8 +90,8 @@ test('tokei omits reports by default', (t) => {
   t.is(result[0].reports, undefined)
 })
 
-test('tokei files option returns per-file reports', (t) => {
-  const result = tokei({
+test('tokeiSync files option returns per-file reports', (t) => {
+  const result = tokeiSync({
     include: ['.'],
     exclude: ['node_modules', 'target'],
     languages: ['Rust'],
@@ -120,8 +120,8 @@ test('tokei files option returns per-file reports', (t) => {
   t.is(totalBlanks, rust.blanks)
 })
 
-test('tokei silently ignores invalid language names', (t) => {
-  const result = tokei({
+test('tokeiSync silently ignores invalid language names', (t) => {
+  const result = tokeiSync({
     include: ['.'],
     exclude: ['node_modules', 'target'],
     languages: ['Rust', 'NotARealLanguage'],
@@ -130,20 +130,20 @@ test('tokei silently ignores invalid language names', (t) => {
   t.is(result[0].language, 'Rust')
 })
 
-test('tokei works with no arguments', (t) => {
-  const result = tokei()
+test('tokeiSync works with no arguments', (t) => {
+  const result = tokeiSync()
   t.true(Array.isArray(result))
   t.true(result.length > 0)
 })
 
-test('tokei handles empty include array by falling back to cwd', (t) => {
-  const result = tokei({ include: [] })
+test('tokeiSync handles empty include array by falling back to cwd', (t) => {
+  const result = tokeiSync({ include: [] })
   t.true(Array.isArray(result))
   t.true(result.length > 0)
 })
 
-test('tokei returns empty array when all language names are invalid', (t) => {
-  const result = tokei({
+test('tokeiSync returns empty array when all language names are invalid', (t) => {
+  const result = tokeiSync({
     include: ['.'],
     exclude: ['node_modules', 'target'],
     languages: ['NotARealLanguage', 'AlsoFake'],
@@ -152,8 +152,8 @@ test('tokei returns empty array when all language names are invalid', (t) => {
   t.is(result.length, 0)
 })
 
-test('tokei exclude works without include (uses cwd)', (t) => {
-  const result = tokei({ exclude: ['node_modules', 'target'] })
+test('tokeiSync exclude works without include (uses cwd)', (t) => {
+  const result = tokeiSync({ exclude: ['node_modules', 'target'] })
   t.true(Array.isArray(result))
   t.true(result.length > 0)
   const rust = result.find((r) => r.language === 'Rust')
@@ -161,12 +161,12 @@ test('tokei exclude works without include (uses cwd)', (t) => {
   t.true(rust!.code > 0)
 })
 
-test('tokei noIgnoreVcs option disables .gitignore processing', (t) => {
-  const withVcsIgnore = tokei({
+test('tokeiSync noIgnoreVcs option disables .gitignore processing', (t) => {
+  const withVcsIgnore = tokeiSync({
     include: ['.'],
     exclude: ['target'],
   })
-  const withoutVcsIgnore = tokei({
+  const withoutVcsIgnore = tokeiSync({
     include: ['.'],
     exclude: ['target'],
     noIgnoreVcs: true,
@@ -176,12 +176,12 @@ test('tokei noIgnoreVcs option disables .gitignore processing', (t) => {
   t.true(totalWithout >= totalWith)
 })
 
-test('tokei noIgnoreDot option disables .ignore and .tokeignore processing', (t) => {
-  const withDotIgnore = tokei({
+test('tokeiSync noIgnoreDot option disables .ignore and .tokeignore processing', (t) => {
+  const withDotIgnore = tokeiSync({
     include: ['.'],
     exclude: ['node_modules', 'target'],
   })
-  const withoutDotIgnore = tokei({
+  const withoutDotIgnore = tokeiSync({
     include: ['.'],
     exclude: ['node_modules', 'target'],
     noIgnoreDot: true,
@@ -191,12 +191,12 @@ test('tokei noIgnoreDot option disables .ignore and .tokeignore processing', (t)
   t.true(totalWithout >= totalWith)
 })
 
-test('tokei noIgnoreParent option disables parent ignore files', (t) => {
-  const withParentIgnore = tokei({
+test('tokeiSync noIgnoreParent option disables parent ignore files', (t) => {
+  const withParentIgnore = tokeiSync({
     include: ['.'],
     exclude: ['node_modules', 'target'],
   })
-  const withoutParentIgnore = tokei({
+  const withoutParentIgnore = tokeiSync({
     include: ['.'],
     exclude: ['node_modules', 'target'],
     noIgnoreParent: true,
@@ -204,4 +204,75 @@ test('tokei noIgnoreParent option disables parent ignore files', (t) => {
   const totalWith = withParentIgnore.reduce((sum, r) => sum + r.lines, 0)
   const totalWithout = withoutParentIgnore.reduce((sum, r) => sum + r.lines, 0)
   t.true(totalWithout >= totalWith)
+})
+
+// Async tokei() tests
+
+test('tokei returns a promise', async (t) => {
+  const promise = tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target'],
+    languages: ['Rust'],
+  })
+  t.true(promise instanceof Promise)
+  const result = await promise
+  t.true(Array.isArray(result))
+})
+
+test('tokei returns language stats for the current project', async (t) => {
+  const result = await tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target', 'package-template', 'package-template-pnpm'],
+  })
+  t.true(Array.isArray(result))
+  t.true(result.length > 0)
+
+  const rust = result.find((r) => r.language === 'Rust')
+  t.truthy(rust)
+  t.is(typeof rust!.files, 'number')
+  t.is(typeof rust!.lines, 'number')
+  t.is(typeof rust!.code, 'number')
+  t.is(typeof rust!.comments, 'number')
+  t.is(typeof rust!.blanks, 'number')
+  t.true(rust!.files > 0)
+  t.true(rust!.code > 0)
+})
+
+test('tokei filters by language', async (t) => {
+  const result = await tokei({ include: ['.'], exclude: ['node_modules', 'target'], languages: ['Rust'] })
+  t.true(Array.isArray(result))
+  t.is(result.length, 1)
+  t.is(result[0].language, 'Rust')
+})
+
+test('tokei works with no arguments', async (t) => {
+  const result = await tokei()
+  t.true(Array.isArray(result))
+  t.true(result.length > 0)
+})
+
+test('tokei produces same results as tokeiSync', async (t) => {
+  const options = {
+    include: ['.'],
+    exclude: ['node_modules', 'target'],
+    languages: ['Rust'],
+  }
+  const syncResult = tokeiSync(options)
+  const asyncResult = await tokei(options)
+
+  t.deepEqual(asyncResult, syncResult)
+})
+
+test('tokei files option returns per-file reports', async (t) => {
+  const result = await tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target'],
+    languages: ['Rust'],
+    files: true,
+  })
+  const rust = result[0]
+  t.truthy(rust.reports)
+  t.true(Array.isArray(rust.reports))
+  t.true(rust.reports!.length > 0)
+  t.is(rust.reports!.length, rust.files)
 })

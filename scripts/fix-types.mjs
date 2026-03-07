@@ -27,6 +27,9 @@ dts = dts.replace('languages?: Array<string>', 'languages?: Array<Language>')
 // Replace language: string with language: Language in LanguageInfo
 dts = dts.replace(/^( +language): string$/m, '$1: Language')
 
+// Fix async tokei() return type (napi-rs generates Promise<unknown> for AsyncTask)
+dts = dts.replace('Promise<unknown>', 'Promise<Array<LanguageInfo>>')
+
 writeFileSync(dtsPath, dts)
 
 console.log(`Generated Language union with ${languages.length} variants`)
