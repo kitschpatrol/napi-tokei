@@ -1,3 +1,11 @@
+> [!NOTE]
+>
+> This is a fork of [faga295/napi-tokei](https://github.com/faga295/napi-tokei) with an updated version of its [tokei](https://github.com/XAMPPRocky/tokei) dependency and some modernization to the repo template.
+>
+> The original readme is below.
+
+---
+
 # napi-tokei
 
 `napi-tokei` is a node binding built with `tokei`, helping you count your code quickly.
@@ -9,20 +17,20 @@ Choose your preferred package manager.
 ```
 
 # NPM
-$ npm install @faga/tokei
+$ npm install @kitschpatrol/tokei
 
 # YARN
-$ yarn add @faga/tokei
+$ yarn add @kitschpatrol/tokei
 
 # PNPM
-$ pnpm install @faga/tokei
+$ pnpm install @kitschpatrol/tokei
 
 ```
 
 ## Examples
 
 ```ts
-import tokei from '@faga/tokei'
+import tokei from '@kitschpatrol/tokei'
 import process from 'process'
 
 const include = [process.cwd()]

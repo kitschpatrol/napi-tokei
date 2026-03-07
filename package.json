@@ -1,6 +1,6 @@
 {
-  "name": "@faga/tokei",
-  "version": "0.0.1",
+  "name": "@kitschpatrol/tokei",
+  "version": "1.0.2",
   "description": "Node binding for tokei, a fast code statistics tool",
   "main": "index.js",
   "types": "index.d.ts",
