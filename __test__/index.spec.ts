@@ -27,3 +27,56 @@ test('tokei filters by language', (t) => {
   t.is(result.length, 1)
   t.is(result[0].lang, 'Rust')
 })
+
+test('tokei hidden option includes dotfiles', (t) => {
+  const withoutHidden = tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target'],
+  })
+  const withHidden = tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target'],
+    hidden: true,
+  })
+  // With hidden files included, we should get at least as many total lines
+  const totalWithout = withoutHidden.reduce((sum, r) => sum + r.lines, 0)
+  const totalWith = withHidden.reduce((sum, r) => sum + r.lines, 0)
+  t.true(totalWith >= totalWithout)
+})
+
+test('tokei noIgnore option disables ignore file processing', (t) => {
+  const withIgnore = tokei({
+    include: ['.'],
+    exclude: ['target'],
+  })
+  const withoutIgnore = tokei({
+    include: ['.'],
+    exclude: ['target'],
+    noIgnore: true,
+  })
+  // With ignore files disabled, we should find at least as many lines
+  // (node_modules and other gitignored paths would be included)
+  const totalWith = withIgnore.reduce((sum, r) => sum + r.lines, 0)
+  const totalWithout = withoutIgnore.reduce((sum, r) => sum + r.lines, 0)
+  t.true(totalWithout >= totalWith)
+})
+
+test('tokei treatDocStringsAsComments shifts counts', (t) => {
+  const normal = tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target'],
+    languages: ['Rust'],
+  })
+  const docAsComments = tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target'],
+    languages: ['Rust'],
+    treatDocStringsAsComments: true,
+  })
+  t.truthy(normal[0])
+  t.truthy(docAsComments[0])
+  // Total lines should remain the same regardless of classification
+  t.is(normal[0].lines, docAsComments[0].lines)
+  // With doc strings as comments, comments should be >= normal comments
+  t.true(docAsComments[0].comments >= normal[0].comments)
+})

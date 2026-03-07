@@ -30,16 +30,32 @@ pub struct TokeiOptions {
   pub include: Option<Vec<String>>,
   pub exclude: Option<Vec<String>>,
   pub languages: Option<Vec<String>>,
+  pub hidden: Option<bool>,
+  pub no_ignore: Option<bool>,
+  pub no_ignore_parent: Option<bool>,
+  pub no_ignore_dot: Option<bool>,
+  pub no_ignore_vcs: Option<bool>,
+  pub treat_doc_strings_as_comments: Option<bool>,
 }
 
 #[napi]
 pub fn tokei(options: TokeiOptions) -> Vec<LanguageInfo> {
-  let config = Config::default();
-  let mut languages = Languages::new();
-
   let langs: Option<Vec<LangType>> = options
     .languages
     .map(|lang_type| lang_type.iter().map(|s| LangType::from(&**s)).collect());
+
+  let config = Config {
+    hidden: options.hidden,
+    no_ignore: options.no_ignore,
+    no_ignore_parent: options.no_ignore_parent,
+    no_ignore_dot: options.no_ignore_dot,
+    no_ignore_vcs: options.no_ignore_vcs,
+    treat_doc_strings_as_comments: options.treat_doc_strings_as_comments,
+    types: langs.as_ref().map(|l| l.iter().map(|lt| **lt).collect()),
+    ..Config::default()
+  };
+
+  let mut languages = Languages::new();
   languages.get_statistics(
     &options
       .include
@@ -52,18 +68,20 @@ pub fn tokei(options: TokeiOptions) -> Vec<LanguageInfo> {
       .collect::<Vec<&str>>(),
     &config,
   );
+
   let mut res: Vec<LanguageInfo> = vec![];
   if let Some(langs) = langs {
     langs.iter().for_each(|lang_type| {
-      let lang = &languages[&**lang_type];
-      res.push(LanguageInfo {
-        lang: lang_type.to_string(),
-        files: (lang.reports.len() as u32),
-        lines: (lang.lines() as u32),
-        code: (lang.code as u32),
-        comments: (lang.comments as u32),
-        blanks: (lang.blanks as u32),
-      })
+      if let Some(lang) = languages.get(&**lang_type) {
+        res.push(LanguageInfo {
+          lang: lang_type.to_string(),
+          files: (lang.reports.len() as u32),
+          lines: (lang.lines() as u32),
+          code: (lang.code as u32),
+          comments: (lang.comments as u32),
+          blanks: (lang.blanks as u32),
+        })
+      }
     })
   } else {
     for lang in languages.into_iter() {

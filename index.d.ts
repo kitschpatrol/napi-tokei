@@ -26,4 +26,10 @@ export interface TokeiOptions {
   include?: Array<string>
   exclude?: Array<string>
   languages?: Array<string>
+  hidden?: boolean
+  noIgnore?: boolean
+  noIgnoreParent?: boolean
+  noIgnoreDot?: boolean
+  noIgnoreVcs?: boolean
+  treatDocStringsAsComments?: boolean
 }

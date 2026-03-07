@@ -6,7 +6,9 @@
       "Bash(cargo build:*)",
       "Bash(cargo clean:*)",
       "Bash(cargo clippy:*)",
-      "Bash(cargo fmt:*)"
+      "Bash(cargo fmt:*)",
+      "WebFetch(domain:docs.rs)",
+      "Bash(cargo check:*)"
     ]
   }
 }
