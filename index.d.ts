@@ -331,35 +331,94 @@ export type Language =
   | 'Zig'
   | 'ZoKrates'
   | 'Zsh'
+/** Aggregated code statistics for a single programming language. */
 export interface LanguageInfo {
+  /** The language name, e.g. `"Rust"`, `"TypeScript"`, `"ASP.NET"`. */
   language: Language
+  /** Number of files detected for this language. */
   files: number
+  /** Total number of lines (code + comments + blanks). */
   lines: number
+  /** Lines of code (excluding comments and blanks). */
   code: number
+  /** Lines of comments. */
   comments: number
+  /** Blank lines. */
   blanks: number
+  /** Per-file statistics. Only populated when `files` is `true` in options. */
   reports?: Array<Report>
 }
 
+/** Code statistics for a single file. */
 export interface Report {
+  /** The file path. */
   name: string
+  /** Total number of lines (code + comments + blanks). */
   lines: number
+  /** Lines of code (excluding comments and blanks). */
   code: number
+  /** Lines of comments. */
   comments: number
+  /** Blank lines. */
   blanks: number
 }
 
+/**
+ * Count lines of code, comments, and blanks across files and languages.
+ *
+ * @param options - Configuration for paths, language filters, and analysis behavior.
+ * @returns Aggregated statistics per language for the given paths.
+ */
 export declare function tokei(options: TokeiOptions): Array<LanguageInfo>
 
+/** Options for the `tokei` function. */
 export interface TokeiOptions {
+  /**
+   * Paths to include in the analysis.
+   * @default Current working directory
+   */
   include?: Array<string>
+  /** Paths to exclude from the analysis. */
   exclude?: Array<string>
+  /**
+   * Filter results to only these languages. Uses tokei display names (e.g. `"Rust"`, `"ASP.NET"`).
+   * Invalid names are silently ignored.
+   */
   languages?: Array<Language>
+  /**
+   * Include hidden files and directories.
+   * @default false
+   */
   hidden?: boolean
+  /**
+   * Don't respect any ignore files (`.gitignore`, `.ignore`, etc.).
+   * Implies `noIgnoreParent`, `noIgnoreDot`, and `noIgnoreVcs`.
+   * @default false
+   */
   noIgnore?: boolean
+  /**
+   * Don't respect ignore files in parent directories.
+   * @default false
+   */
   noIgnoreParent?: boolean
+  /**
+   * Don't respect `.ignore` and `.tokeignore` files.
+   * @default false
+   */
   noIgnoreDot?: boolean
+  /**
+   * Don't respect VCS ignore files (`.gitignore`, `.hgignore`, etc.).
+   * @default false
+   */
   noIgnoreVcs?: boolean
+  /**
+   * Count doc strings (e.g. Python `"""..."""`, Rust `///`) as comments instead of code.
+   * @default false
+   */
   treatDocStringsAsComments?: boolean
+  /**
+   * Include per-file statistics in the `reports` field of each result.
+   * @default false
+   */
   files?: boolean
 }
