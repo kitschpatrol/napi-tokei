@@ -10,7 +10,7 @@ test('tokei returns language stats for the current project', (t) => {
   t.true(Array.isArray(result))
   t.true(result.length > 0)
 
-  const rust = result.find((r) => r.lang === 'Rust')
+  const rust = result.find((r) => r.language === 'Rust')
   t.truthy(rust)
   t.is(typeof rust!.files, 'number')
   t.is(typeof rust!.lines, 'number')
@@ -25,7 +25,7 @@ test('tokei filters by language', (t) => {
   const result = tokei({ include: ['.'], exclude: ['node_modules', 'target'], languages: ['Rust'] })
   t.true(Array.isArray(result))
   t.is(result.length, 1)
-  t.is(result[0].lang, 'Rust')
+  t.is(result[0].language, 'Rust')
 })
 
 test('tokei hidden option includes dotfiles', (t) => {
@@ -127,5 +127,5 @@ test('tokei silently ignores invalid language names', (t) => {
     languages: ['Rust', 'NotARealLanguage'],
   })
   t.is(result.length, 1)
-  t.is(result[0].lang, 'Rust')
+  t.is(result[0].language, 'Rust')
 })

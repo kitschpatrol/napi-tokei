@@ -4,7 +4,7 @@ use std::env;
 use tokei::{Config, LanguageType, Languages};
 #[napi(object)]
 pub struct LanguageInfo {
-  pub lang: String,
+  pub language: String,
   pub files: u32,
   pub lines: u32,
   pub code: u32,
@@ -91,7 +91,7 @@ pub fn tokei(options: TokeiOptions) -> Vec<LanguageInfo> {
     for lang_type in &langs {
       if let Some(lang) = languages.get(lang_type) {
         res.push(LanguageInfo {
-          lang: lang_type.to_string(),
+          language: lang_type.to_string(),
           files: lang.reports.len() as u32,
           lines: lang.lines() as u32,
           code: lang.code as u32,
@@ -108,7 +108,7 @@ pub fn tokei(options: TokeiOptions) -> Vec<LanguageInfo> {
   } else {
     for (lang_type, lang) in &languages {
       res.push(LanguageInfo {
-        lang: lang_type.to_string(),
+        language: lang_type.to_string(),
         files: lang.reports.len() as u32,
         lines: lang.lines() as u32,
         code: lang.code as u32,
