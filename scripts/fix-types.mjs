@@ -2,8 +2,9 @@
 // and patches index.d.ts to use it.
 import { execSync } from 'child_process'
 import { readFileSync, writeFileSync } from 'fs'
+import { fileURLToPath } from 'url'
 
-const root = new URL('..', import.meta.url).pathname
+const root = fileURLToPath(new URL('..', import.meta.url))
 
 // Get all language names directly from the tokei crate
 const output = execSync('cargo run --bin list-languages -q', { encoding: 'utf-8', cwd: root })
@@ -11,7 +12,7 @@ const output = execSync('cargo run --bin list-languages -q', { encoding: 'utf-8'
 const languages = output.trim().split('\n')
 const unionType = languages.map((l) => `  | '${l.replace(/'/g, "\\'")}'`).join('\n')
 
-const dtsPath = new URL('../index.d.ts', import.meta.url).pathname
+const dtsPath = fileURLToPath(new URL('../index.d.ts', import.meta.url))
 let dts = readFileSync(dtsPath, 'utf-8')
 
 // Remove any existing Language definition

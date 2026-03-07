@@ -39,7 +39,7 @@ Node.js native binding for [Tokei](https://github.com/XAMPPRocky/tokei), a fast 
 
 - [Node](https://nodejs.org/) 18+
 
-Tokei binaries are included for x86_64, aarch64, i686, and armv7.
+Tokei binaries are included for x86\_64, aarch64, i686, and armv7.
 
 _WebAssembly is not supported._
 
