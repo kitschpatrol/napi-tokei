@@ -141,3 +141,67 @@ test('tokei handles empty include array by falling back to cwd', (t) => {
   t.true(Array.isArray(result))
   t.true(result.length > 0)
 })
+
+test('tokei returns empty array when all language names are invalid', (t) => {
+  const result = tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target'],
+    languages: ['NotARealLanguage', 'AlsoFake'],
+  })
+  t.true(Array.isArray(result))
+  t.is(result.length, 0)
+})
+
+test('tokei exclude works without include (uses cwd)', (t) => {
+  const result = tokei({ exclude: ['node_modules', 'target'] })
+  t.true(Array.isArray(result))
+  t.true(result.length > 0)
+  const rust = result.find((r) => r.language === 'Rust')
+  t.truthy(rust)
+  t.true(rust!.code > 0)
+})
+
+test('tokei noIgnoreVcs option disables .gitignore processing', (t) => {
+  const withVcsIgnore = tokei({
+    include: ['.'],
+    exclude: ['target'],
+  })
+  const withoutVcsIgnore = tokei({
+    include: ['.'],
+    exclude: ['target'],
+    noIgnoreVcs: true,
+  })
+  const totalWith = withVcsIgnore.reduce((sum, r) => sum + r.lines, 0)
+  const totalWithout = withoutVcsIgnore.reduce((sum, r) => sum + r.lines, 0)
+  t.true(totalWithout >= totalWith)
+})
+
+test('tokei noIgnoreDot option disables .ignore and .tokeignore processing', (t) => {
+  const withDotIgnore = tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target'],
+  })
+  const withoutDotIgnore = tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target'],
+    noIgnoreDot: true,
+  })
+  const totalWith = withDotIgnore.reduce((sum, r) => sum + r.lines, 0)
+  const totalWithout = withoutDotIgnore.reduce((sum, r) => sum + r.lines, 0)
+  t.true(totalWithout >= totalWith)
+})
+
+test('tokei noIgnoreParent option disables parent ignore files', (t) => {
+  const withParentIgnore = tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target'],
+  })
+  const withoutParentIgnore = tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target'],
+    noIgnoreParent: true,
+  })
+  const totalWith = withParentIgnore.reduce((sum, r) => sum + r.lines, 0)
+  const totalWithout = withoutParentIgnore.reduce((sum, r) => sum + r.lines, 0)
+  t.true(totalWithout >= totalWith)
+})

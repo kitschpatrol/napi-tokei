@@ -18,18 +18,26 @@ bench.add('Native tokei – scan this project (Rust only)', () => {
   })
 })
 
-bench.add('child_process cloc via tokei CLI (if installed)', () => {
-  try {
+let hasTokeiCli = false
+try {
+  execSync('tokei --version', { stdio: 'pipe' })
+  hasTokeiCli = true
+} catch {
+  // tokei CLI not installed
+}
+
+if (hasTokeiCli) {
+  bench.add('child_process cloc via tokei CLI', () => {
     execSync(
       'tokei . --exclude node_modules --exclude target --exclude package-template --exclude package-template-pnpm',
       {
         stdio: 'pipe',
       },
     )
-  } catch {
-    // tokei CLI not installed – skip silently
-  }
-})
+  })
+} else {
+  console.log('Note: tokei CLI not found, skipping CLI benchmark')
+}
 
 await bench.run()
 

@@ -331,6 +331,7 @@ export type Language =
   | 'Zig'
   | 'ZoKrates'
   | 'Zsh'
+
 /** Aggregated code statistics for a single programming language. */
 export interface LanguageInfo {
   /** The language name, e.g. `"Rust"`, `"TypeScript"`, `"ASP.NET"`. */

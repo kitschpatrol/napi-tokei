@@ -92,6 +92,26 @@ fn build_reports(reports: &[tokei::Report]) -> Vec<Report> {
     .collect()
 }
 
+fn build_language_info(
+  lang_type: &LanguageType,
+  lang: &tokei::Language,
+  include_files: bool,
+) -> LanguageInfo {
+  LanguageInfo {
+    language: lang_type.to_string(),
+    files: lang.reports.len() as u32,
+    lines: lang.lines() as u32,
+    code: lang.code as u32,
+    comments: lang.comments as u32,
+    blanks: lang.blanks as u32,
+    reports: if include_files {
+      Some(build_reports(&lang.reports))
+    } else {
+      None
+    },
+  }
+}
+
 /// Count lines of code, comments, and blanks across files and languages.
 ///
 /// @param options - Configuration for paths, language filters, and analysis behavior.
@@ -135,42 +155,19 @@ pub fn tokei(options: Option<TokeiOptions>) -> Vec<LanguageInfo> {
     &config,
   );
 
-  let mut res: Vec<LanguageInfo> = vec![];
   if let Some(langs) = langs {
-    for lang_type in &langs {
-      if let Some(lang) = languages.get(lang_type) {
-        res.push(LanguageInfo {
-          language: lang_type.to_string(),
-          files: lang.reports.len() as u32,
-          lines: lang.lines() as u32,
-          code: lang.code as u32,
-          comments: lang.comments as u32,
-          blanks: lang.blanks as u32,
-          reports: if include_files {
-            Some(build_reports(&lang.reports))
-          } else {
-            None
-          },
-        });
-      }
-    }
+    langs
+      .iter()
+      .filter_map(|lang_type| {
+        languages
+          .get(lang_type)
+          .map(|lang| build_language_info(lang_type, lang, include_files))
+      })
+      .collect()
   } else {
-    for (lang_type, lang) in &languages {
-      res.push(LanguageInfo {
-        language: lang_type.to_string(),
-        files: lang.reports.len() as u32,
-        lines: lang.lines() as u32,
-        code: lang.code as u32,
-        comments: lang.comments as u32,
-        blanks: lang.blanks as u32,
-        reports: if include_files {
-          Some(build_reports(&lang.reports))
-        } else {
-          None
-        },
-      });
-    }
+    languages
+      .iter()
+      .map(|(lang_type, lang)| build_language_info(lang_type, lang, include_files))
+      .collect()
   }
-
-  res
 }

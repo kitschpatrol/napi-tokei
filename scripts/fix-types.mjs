@@ -18,7 +18,7 @@ let dts = readFileSync(dtsPath, 'utf-8')
 dts = dts.replace(/\nexport type Language =[\s\S]*?\n\n/g, '\n')
 
 // Add the union type before the first export
-dts = dts.replace('/* eslint-disable */\n', `/* eslint-disable */\n\nexport type Language =\n${unionType}\n`)
+dts = dts.replace('/* eslint-disable */\n', `/* eslint-disable */\n\nexport type Language =\n${unionType}\n\n`)
 
 // Replace Array<string> with Array<Language> for languages field
 dts = dts.replace('languages?: Array<string>', 'languages?: Array<Language>')
