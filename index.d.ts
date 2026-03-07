@@ -382,7 +382,7 @@ export interface TokeiOptions {
   /** Paths to exclude from the analysis. */
   exclude?: Array<string>
   /**
-   * Filter results to only these languages. Uses tokei display names (e.g. `"Rust"`, `"ASP.NET"`).
+   * Filter results to only these languages. Uses Tokei display names (e.g. `"Rust"`, `"ASP.NET"`).
    * Invalid names are silently ignored.
    */
   languages?: Array<Language>

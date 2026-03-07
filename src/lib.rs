@@ -45,7 +45,7 @@ pub struct TokeiOptions {
   pub include: Option<Vec<String>>,
   /// Paths to exclude from the analysis.
   pub exclude: Option<Vec<String>>,
-  /// Filter results to only these languages. Uses tokei display names (e.g. `"Rust"`, `"ASP.NET"`).
+  /// Filter results to only these languages. Uses Tokei display names (e.g. `"Rust"`, `"ASP.NET"`).
   /// Invalid names are silently ignored.
   pub languages: Option<Vec<String>>,
   /// Include hidden files and directories.
