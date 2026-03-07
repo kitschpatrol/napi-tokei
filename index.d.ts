@@ -369,7 +369,7 @@ export interface Report {
  * @param options - Configuration for paths, language filters, and analysis behavior.
  * @returns Aggregated statistics per language for the given paths.
  */
-export declare function tokei(options: TokeiOptions): Array<LanguageInfo>
+export declare function tokei(options?: TokeiOptions | undefined | null): Array<LanguageInfo>
 
 /** Options for the `tokei` function. */
 export interface TokeiOptions {
