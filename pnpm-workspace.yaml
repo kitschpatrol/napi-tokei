@@ -1,5 +1,0 @@
-packages:
-  - 'playground/*'
-  - 'packages/**'
-  - 'crates/**'
-  - 'npm/*'

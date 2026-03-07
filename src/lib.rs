@@ -46,7 +46,7 @@ pub fn tokei(options: TokeiOptions) -> Vec<LanguageInfo> {
       .unwrap_or_else(|| vec![env::current_dir().unwrap().to_string_lossy().to_string()]),
     &options
       .exclude
-      .unwrap_or_else(|| vec![])
+      .unwrap_or_default()
       .iter()
       .map(|s| &**s)
       .collect::<Vec<&str>>(),

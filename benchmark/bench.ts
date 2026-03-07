@@ -1,28 +1,36 @@
-import b from 'benny'
+import { execSync } from 'node:child_process'
 
-import { plus100 } from '../index'
+import { Bench } from 'tinybench'
 
-function add(a: number) {
-  return a + 100
-}
+import { tokei } from '../index.js'
 
-async function run() {
-  await b.suite(
-    'Add 100',
+const bench = new Bench()
 
-    b.add('Native a + 100', () => {
-      plus100(10)
-    }),
-
-    b.add('JavaScript a + 100', () => {
-      add(10)
-    }),
-
-    b.cycle(),
-    b.complete(),
-  )
-}
-
-run().catch((e) => {
-  console.error(e)
+bench.add('Native tokei – scan this project', () => {
+  tokei({ include: ['.'], exclude: ['node_modules', 'target', 'package-template', 'package-template-pnpm'] })
 })
+
+bench.add('Native tokei – scan this project (Rust only)', () => {
+  tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target', 'package-template', 'package-template-pnpm'],
+    languages: ['Rust'],
+  })
+})
+
+bench.add('child_process cloc via tokei CLI (if installed)', () => {
+  try {
+    execSync(
+      'tokei . --exclude node_modules --exclude target --exclude package-template --exclude package-template-pnpm',
+      {
+        stdio: 'pipe',
+      },
+    )
+  } catch {
+    // tokei CLI not installed – skip silently
+  }
+})
+
+await bench.run()
+
+console.table(bench.table())
