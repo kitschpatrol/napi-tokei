@@ -1,20 +1,20 @@
 [package]
 edition = "2021"
-name    = "napi-tokei"
+name = "napi-tokei"
 version = "0.1.0"
 
 [lib]
 crate-type = ["cdylib"]
 
 [dependencies]
-napi        = "3.0.0"
+napi = "3.0.0"
 napi-derive = "3.0.0"
-tokei       = "14.0.0"
+tokei = "14.0.0"
 
 [build-dependencies]
 napi-build = "2"
 
 [profile.release]
 codegen-units = 1
-lto           = true
-strip         = "symbols"
+lto = true
+strip = "symbols"

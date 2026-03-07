@@ -3,7 +3,10 @@ import test from 'ava'
 import { tokei } from '../index.js'
 
 test('tokei returns language stats for the current project', (t) => {
-  const result = tokei({ include: ['.'], exclude: ['node_modules', 'target', 'package-template', 'package-template-pnpm'] })
+  const result = tokei({
+    include: ['.'],
+    exclude: ['node_modules', 'target', 'package-template', 'package-template-pnpm'],
+  })
   t.true(Array.isArray(result))
   t.true(result.length > 0)
 
