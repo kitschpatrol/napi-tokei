@@ -129,3 +129,15 @@ test('tokei silently ignores invalid language names', (t) => {
   t.is(result.length, 1)
   t.is(result[0].language, 'Rust')
 })
+
+test('tokei works with no arguments', (t) => {
+  const result = tokei()
+  t.true(Array.isArray(result))
+  t.true(result.length > 0)
+})
+
+test('tokei handles empty include array by falling back to cwd', (t) => {
+  const result = tokei({ include: [] })
+  t.true(Array.isArray(result))
+  t.true(result.length > 0)
+})

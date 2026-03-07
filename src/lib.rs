@@ -72,6 +72,13 @@ pub struct TokeiOptions {
   pub files: Option<bool>,
 }
 
+fn cwd() -> String {
+  env::current_dir()
+    .unwrap_or_else(|_| ".".into())
+    .to_string_lossy()
+    .to_string()
+}
+
 fn build_reports(reports: &[tokei::Report]) -> Vec<Report> {
   reports
     .iter()
@@ -111,11 +118,14 @@ pub fn tokei(options: Option<TokeiOptions>) -> Vec<LanguageInfo> {
     ..Config::default()
   };
 
+  let include = match options.include {
+    Some(paths) if !paths.is_empty() => paths,
+    _ => vec![cwd()],
+  };
+
   let mut languages = Languages::new();
   languages.get_statistics(
-    &options
-      .include
-      .unwrap_or_else(|| vec![env::current_dir().unwrap().to_string_lossy().to_string()]),
+    &include,
     &options
       .exclude
       .unwrap_or_default()
