@@ -6,6 +6,7 @@ export * from '@faga/tokei-core'
 const transformInfo = (infos:Array<LanguageInfo>) => {
     const res:Record<string, Omit<LanguageInfo, 'lang'>> = {};
     const total:Omit<LanguageInfo, 'lang'> = {
+        files: 0,
         code: 0,
         comments: 0,
         blanks: 0,
@@ -16,6 +17,7 @@ const transformInfo = (infos:Array<LanguageInfo>) => {
         res[info.lang] = info
         // @ts-ignore
         delete info.lang;
+        total.files += info.files;
         total.code += info.code;
         total.comments += info.comments;
         total.blanks += info.blanks;

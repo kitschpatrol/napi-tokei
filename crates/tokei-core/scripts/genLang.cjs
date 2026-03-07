@@ -4,7 +4,7 @@ const lines = fs.readFileSync(path.resolve(__dirname,'./languageType.txt'), 'utf
 
 let matchCode = "";
 
-lines.forEach(type => {
+lines.filter(type => type.trim()).forEach(type => {
     matchCode += `\t  "${type}" => LangType(LanguageType::${type}),\n`
 })
 

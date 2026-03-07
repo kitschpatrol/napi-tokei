@@ -5,6 +5,7 @@
 
 export interface LanguageInfo {
   lang: string
+  files: number
   lines: number
   code: number
   comments: number

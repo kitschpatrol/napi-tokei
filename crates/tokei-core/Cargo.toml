@@ -13,7 +13,7 @@ crate-type = ["cdylib"]
 [dependencies]
 napi = "2"
 napi-derive = "2"
-tokei = "12.1.2"
+tokei = "14.0.0"
 
 [build-dependencies]
 napi-build = "2"

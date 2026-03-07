@@ -7,6 +7,7 @@ use tokei::{Config, Languages};
 #[napi(object)]
 pub struct LanguageInfo {
   pub lang: String,
+  pub files: u32,
   pub lines: u32,
   pub code: u32,
   pub comments: u32,
@@ -57,6 +58,7 @@ pub fn tokei(options: TokeiOptions) -> Vec<LanguageInfo> {
       let lang = &languages[&**lang_type];
       res.push(LanguageInfo {
         lang: lang_type.to_string(),
+        files: (lang.reports.len() as u32),
         lines: (lang.lines() as u32),
         code: (lang.code as u32),
         comments: (lang.comments as u32),
@@ -67,6 +69,7 @@ pub fn tokei(options: TokeiOptions) -> Vec<LanguageInfo> {
     for lang in languages.into_iter() {
       res.push(LanguageInfo {
         lang: lang.0.to_string(),
+        files: (lang.1.reports.len() as u32),
         lines: (lang.1.lines() as u32),
         code: (lang.1.code as u32),
         comments: (lang.1.comments as u32),
