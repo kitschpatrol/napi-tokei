@@ -2,7 +2,7 @@
 edition = "2021"
 name = "napi-tokei"
 version = "2.0.0"
-description = "Node bindings for tokei, a fast code statistics tool"
+description = "Node bindings for Tokei, a fast code counting tool."
 license = "MIT"
 repository = "https://github.com/kitschpatrol/napi-tokei"
 
