@@ -7,7 +7,7 @@
 <!-- badges -->
 
 [![NPM Package @kitschpatrol/tokei](https://img.shields.io/npm/v/@kitschpatrol/tokei.svg)](https://npmjs.com/package/@kitschpatrol/tokei)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/mit/)
 [![CI](https://github.com/kitschpatrol/napi-tokei/actions/workflows/ci.yml/badge.svg)](https://github.com/kitschpatrol/napi-tokei/actions/workflows/ci.yml)
 
 <!-- /badges -->
@@ -207,7 +207,7 @@ Modifications from [upstream](https://github.com/faga295/napi-tokei) include the
 
 ## Maintainers
 
-@kitschpatrol
+[kitschpatrol](https://github.com/kitschpatrol)
 
 ## Acknowledgments
 
@@ -221,7 +221,11 @@ The [napi-rs](https://github.com/napi-rs/napi-rs) project makes bridging Rust an
 
 ## Contributing
 
-[Issues](https://github.com/kitschpatrol/napi-tokei/issues) and pull requests are welcome.
+[Issues](https://github.com/kitschpatrol/napi-tokei/issues) are welcome and appreciated.
+
+Please open an issue to discuss changes before submitting a pull request. Unsolicited PRs (especially AI-generated ones) are unlikely to be merged.
+
+This repository uses [@kitschpatrol/shared-config](https://github.com/kitschpatrol/shared-config) (via its `ksc` CLI) for linting and formatting, plus [MDAT](https://github.com/kitschpatrol/mdat) for readme placeholder expansion.
 
 <!-- /contributing -->
 
@@ -229,7 +233,7 @@ The [napi-rs](https://github.com/napi-rs/napi-rs) project makes bridging Rust an
 
 ## License
 
-[MIT](license.txt) © Eric Mika
+[MIT](license.txt) © [Eric Mika](https://ericmika.com)
 
 <!-- /license -->
 

@@ -195,4 +195,4 @@ Temporary Items
 *.icloud
 
 # LLMs
-/.claude
+.claude/
