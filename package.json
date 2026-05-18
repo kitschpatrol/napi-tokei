@@ -1,6 +1,6 @@
 {
   "name": "@kitschpatrol/tokei",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Node bindings for Tokei, a fast code counting tool.",
   "keywords": [
     "tokei",
