@@ -196,3 +196,5 @@ Temporary Items
 
 # LLMs
 .claude/
+/skills-lock.json
+/.agents

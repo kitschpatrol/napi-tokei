@@ -1,7 +1,7 @@
 [package]
 edition = "2021"
 name = "napi-tokei"
-version = "2.0.0"
+version = "2.0.2"
 description = "Node bindings for Tokei, a fast code counting tool."
 license = "MIT"
 repository = "https://github.com/kitschpatrol/napi-tokei"
@@ -16,7 +16,7 @@ path = "scripts/list-languages.rs"
 [dependencies]
 napi = "3.0.0"
 napi-derive = "3.0.0"
-tokei = "14.0.0"
+tokei = "15.0.0"
 
 [build-dependencies]
 napi-build = "2"

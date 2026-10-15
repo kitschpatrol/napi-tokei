@@ -34,9 +34,11 @@ export type Language =
   | 'Bean'
   | 'Bicep'
   | 'Bitbake'
+  | 'Blade'
   | 'BQN'
   | 'BrightScript'
   | 'C'
+  | 'C3'
   | 'C Header'
   | 'CMake'
   | 'C#'
@@ -73,6 +75,7 @@ export type Language =
   | 'Dart'
   | 'Device Tree'
   | 'Dhall'
+  | 'Djot'
   | 'Dockerfile'
   | '.NET Resource'
   | 'Dream Maker'
@@ -112,6 +115,7 @@ export type Language =
   | 'GLSL'
   | 'Gml'
   | 'Go'
+  | 'Godot TextScene'
   | 'Go HTML'
   | 'GraphQL'
   | 'Groovy'
@@ -331,6 +335,14 @@ export type Language =
   | 'Zig'
   | 'ZoKrates'
   | 'Zsh'
+
+/**
+ * Which binding artifact the generated loader actually loaded: `'native'` for
+ * a native addon, otherwise the `platformArchABI` of the WASI flavor. Every
+ * flavor napi-rs can build is listed, because `NAPI_RS_NATIVE_LIBRARY_PATH`
+ * can point the loader at a WASI artifact this package does not build itself.
+ */
+export declare const __napiBindingTarget: 'native' | 'wasm32-wasi' | 'wasm32-wasip1'
 
 /** Aggregated code statistics for a single programming language. */
 export interface LanguageInfo {

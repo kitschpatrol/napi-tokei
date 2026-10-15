@@ -6,8 +6,8 @@
 
 <!-- badges -->
 
-[![NPM Package @kitschpatrol/tokei](https://img.shields.io/npm/v/@kitschpatrol/tokei.svg)](https://npmjs.com/package/@kitschpatrol/tokei)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/mit/)
+[![NPM Package @kitschpatrol/tokei](https://img.shields.io/npm/v/@kitschpatrol/tokei.svg)](https://www.npmjs.com/package/@kitschpatrol/tokei)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/license/mit)
 [![CI](https://github.com/kitschpatrol/napi-tokei/actions/workflows/ci.yml/badge.svg)](https://github.com/kitschpatrol/napi-tokei/actions/workflows/ci.yml)
 
 <!-- /badges -->
@@ -24,13 +24,13 @@
 >
 > An upstream-compatible [1.1.0 version](https://www.npmjs.com/package/@kitschpatrol/tokei/v/1.1.0) is available on NPM if you just want the updated Tokei dependency.
 >
-> A [2.0.0+ version](https://www.npmjs.com/package/@kitschpatrol/tokei) with breaking improvements is also available.
+> A [2.x.x+ version](https://www.npmjs.com/package/@kitschpatrol/tokei) with breaking improvements is also available.
 >
 > A full accounting of the changes is [available below](#changes).
 
 ## Overview
 
-Node.js native bindings for [Tokei](https://github.com/XAMPPRocky/tokei), a fast code statistics tool written in Rust. It counts lines of code, comments, and blanks across 329 programming languages, with support for language filtering, per-file breakdowns, and configurable ignore rules.
+Node.js native bindings for [Tokei](https://github.com/XAMPPRocky/tokei) 15, a fast code statistics tool written in Rust. It counts lines of code, comments, and blanks across 333 programming languages, with support for language filtering, per-file breakdowns, and configurable ignore rules.
 
 ## Getting started
 
@@ -38,7 +38,7 @@ Node.js native bindings for [Tokei](https://github.com/XAMPPRocky/tokei), a fast
 
 - [Node](https://nodejs.org/) 18+
 
-Tokei binaries are included for x86\_64, aarch64, i686, and armv7.
+Tokei binaries are included for x86_64, aarch64, i686, and armv7.
 
 _WebAssembly is not supported._
 
@@ -128,7 +128,7 @@ Code statistics for a single file. Only included when `files: true` is set.
 
 #### `Language`
 
-A TypeScript string literal union of all 329 supported language names, providing autocomplete and type safety for the `languages` option. See the [full list in the type definitions](index.d.ts).
+A TypeScript string literal union of all 333 supported language names, providing autocomplete and type safety for the `languages` option. See the [full list in the type definitions](index.d.ts).
 
 ### Examples
 
@@ -205,6 +205,11 @@ Modifications from [upstream](https://github.com/faga295/napi-tokei) include the
 - **JSDoc comments**\
   Provide documentation-on-hover for all exported types and fields.
 
+### 2.1.0+
+
+- **Tokei 15**\
+  Adds Blade, C3, Djot, and Godot TextScene, for 333 supported languages.
+
 ## Maintainers
 
 [kitschpatrol](https://github.com/kitschpatrol)
@@ -217,17 +222,13 @@ Modifications from [upstream](https://github.com/faga295/napi-tokei) include the
 
 The [napi-rs](https://github.com/napi-rs/napi-rs) project makes bridging Rust and Node much more tractable.
 
-<!-- contributing -->
-
 ## Contributing
 
 [Issues](https://github.com/kitschpatrol/napi-tokei/issues) are welcome and appreciated.
 
 Please open an issue to discuss changes before submitting a pull request. Unsolicited PRs (especially AI-generated ones) are unlikely to be merged.
 
-This repository uses [@kitschpatrol/shared-config](https://github.com/kitschpatrol/shared-config) (via its `ksc` CLI) for linting and formatting, plus [MDAT](https://github.com/kitschpatrol/mdat) for readme placeholder expansion.
-
-<!-- /contributing -->
+This repository uses [oxlint](https://oxc.rs/docs/guide/usage/linter) and [oxfmt](https://oxc.rs/docs/guide/usage/formatter) for linting and formatting, [rustfmt](https://github.com/rust-lang/rustfmt) and [Clippy](https://github.com/rust-lang/rust-clippy) for Rust, plus [MDAT](https://github.com/kitschpatrol/mdat) for readme placeholder expansion.
 
 <!-- license -->
 

@@ -38,38 +38,35 @@
     "bench": "node --import @oxc-node/core/register benchmark/bench.ts",
     "build:debug": "node ./scripts/build.mjs",
     "build": "node ./scripts/build.mjs --release",
-    "clean": "shx rm -f pnpm-lock.yaml && git clean -fdX -e !.claude/",
-    "format:prettier": "prettier . -w",
+    "clean-deep": "shx rm -f pnpm-lock.yaml && git clean -fdX -e !.claude/",
+    "format:oxfmt": "oxfmt",
     "format:readme": "mdat",
     "format:rs": "cargo fmt",
-    "format:toml": "taplo format",
-    "format": "run-p format:prettier format:rs format:toml format:readme",
+    "format": "run-p format:oxfmt format:rs format:readme",
     "lint:oxlint": "oxlint",
     "lint:readme": "mdat check",
     "lint": "run-p lint:oxlint lint:readme",
     "prepublishOnly": "napi prepublish -t npm",
     "test": "ava",
     "version": "napi version",
-    "release": "bumpp --commit %s"
+    "prepare": "skills experimental_sync -y -f",
+    "release": "bumpp --commit %s package.json Cargo.toml index.js"
   },
   "lint-staged": {
     "*.@(js|ts|tsx)": [
       "oxlint --fix"
     ],
-    "*.@(js|ts|tsx|yml|yaml|md|json)": [
-      "prettier --write"
-    ],
-    "*.toml": [
-      "taplo format"
+    "*.@(js|ts|tsx|yml|yaml|md|json|toml)": [
+      "oxfmt --write"
     ]
   },
   "ava": {
     "environmentVariables": {
       "TS_NODE_PROJECT": "./tsconfig.json"
     },
-    "extensions": {
-      "ts": "module"
-    },
+    "extensions": [
+      "ts"
+    ],
     "files": [
       "__test__/**/*.spec.ts"
     ],
@@ -81,24 +78,23 @@
     "workerThreads": false
   },
   "devDependencies": {
-    "@kitschpatrol/remark-config": "^7.6.2",
-    "@napi-rs/cli": "^3.6.2",
-    "@oxc-node/core": "^0.1.0",
-    "@taplo/cli": "^0.7.0",
-    "ava": "^7.0.0",
-    "bumpp": "^11.1.0",
-    "chalk": "^5.6.2",
+    "@kitschpatrol/remark-config": "^8.13.1",
+    "@napi-rs/cli": "^3.10.8",
+    "@oxc-node/core": "^0.1.4",
+    "ava": "^8.0.1",
+    "bumpp": "^12.3.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.4.0",
-    "mdat": "^2.3.5",
-    "npm-run-all2": "^8.0.4",
-    "oxlint": "^1.65.0",
-    "prettier": "^3.8.3",
+    "lint-staged": "^17.6.0",
+    "mdat": "^3.6.2",
+    "npm-run-all2": "^9.0.3",
+    "oxfmt": "^0.73.0",
+    "oxlint": "^1.87.0",
     "shx": "^0.4.0",
-    "tinybench": "^6.0.2",
-    "typescript": "^5.9.3"
+    "skills": "^1.7.2",
+    "tinybench": "^6.2.1",
+    "typescript": "^7.0.2"
   },
-  "packageManager": "pnpm@11.1.2",
+  "packageManager": "pnpm@12.11.2",
   "engines": {
     "node": ">= 18"
   },
@@ -107,11 +103,9 @@
     "registry": "https://registry.npmjs.org/"
   },
   "prettier": {
-    "arrowParens": "always",
     "printWidth": 120,
     "semi": false,
-    "singleQuote": true,
-    "trailingComma": "all"
+    "singleQuote": true
   },
   "napi": {
     "binaryName": "tokei",
