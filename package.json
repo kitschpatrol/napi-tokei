@@ -92,7 +92,7 @@
     "tinybench": "^6.2.1",
     "typescript": "^7.0.2"
   },
-  "packageManager": "pnpm@12.15.0",
+  "packageManager": "pnpm@12.16.1",
   "engines": {
     "node": ">= 18"
   },
