@@ -1,6 +1,14 @@
 minimumReleaseAgeExclude:
+  - '@kitschpatrol/chagent@0.4.0'
   - '@kitschpatrol/remark-config@8.14.0'
 supportedArchitectures:
   os: [current, darwin, linux, win32]
   cpu: [current, x64, arm64, arm]
   libc: [current, glibc, musl]
+skills:
+  dirs:
+    - .agents/skills
+    - .claude/skills
+permissions:
+  mdat:
+    skills: true
