@@ -167,8 +167,8 @@ importers:
   .:
     devDependencies:
       '@kitschpatrol/chagent':
-        specifier: 0.4.0
-        version: 0.4.0(bumpp@12.3.0)
+        specifier: ^0.5.0
+        version: 0.5.0(bumpp@12.3.0)
       '@kitschpatrol/remark-config':
         specifier: ^8.14.0
         version: 8.14.0(@types/node@24.13.6)(@types/unist@3.0.3)(mdast-util-from-markdown@2.1.0(supports-color@9.4.0))(mdast-util-mdx@3.0.0(supports-color@9.4.0))(micromark-util-types@2.0.3)(remark-parse@11.0.0(supports-color@9.4.0))(supports-color@9.4.0)(typescript@7.0.2)
@@ -397,8 +397,8 @@ packages:
     resolution: {integrity: sha512-wgm9Ehl2jpeqP3zw/7mo3kRHFp5MEDhqAdwy1fTGkHAwnkGOVsgpvQhL8B5n1qlb01jV3n/bI0ZfZp5lWA1k4w==}
     engines: {node: '>=18.0.0'}
 
-  '@kitschpatrol/chagent@0.4.0':
-    resolution: {integrity: sha512-qOH2lhy5M04LE47WuXbi/N9bTeKXA4ZgGHGDm3z6iutCMk7m//M7/mjibiwRDBa/wiV9bqrRhq7Nj3iY4Jaqdg==}
+  '@kitschpatrol/chagent@0.5.0':
+    resolution: {integrity: sha512-4copTTywIMv8xHocq8ej4QiIqLw7/SXN6Ou4KROhegAX9b4Izin99iLWBBLT2QX7Q0okN0zVSCCH0JdcARmhFQ==}
     engines: {node: ^24.16.0 || >=26.3.0}
     hasBin: true
     peerDependencies:
@@ -3788,7 +3788,7 @@ snapshots:
     dependencies:
       minipass: 7.1.3
 
-  '@kitschpatrol/chagent@0.4.0(bumpp@12.3.0)':
+  '@kitschpatrol/chagent@0.5.0(bumpp@12.3.0)':
     dependencies:
       '@clack/prompts': 1.8.1
       '@types/node': 24.13.6

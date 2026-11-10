@@ -77,7 +77,7 @@
     "workerThreads": false
   },
   "devDependencies": {
-    "@kitschpatrol/chagent": "0.4.0",
+    "@kitschpatrol/chagent": "^0.5.0",
     "@kitschpatrol/remark-config": "^8.14.0",
     "@napi-rs/cli": "^3.10.8",
     "@oxc-node/core": "^0.1.4",
